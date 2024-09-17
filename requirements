@@ -1,1 +1,0 @@
-cargo install --features lsp --locked taplo-cli
