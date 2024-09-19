@@ -62,6 +62,12 @@ local nmappings = {
     -- { from = "<leader>e", to = "<C-w>j" },
     -- { from = "<leader>n", to = "<C-w>h" },
     -- { from = "<leader>i", to = "<C-w>l" },
+    { from = "<up>", to = ":res +5<CR>" },
+    { from = "<down>", to = ":res -5<CR>" },
+    { from = "<left>", to = ":vertical resize-5<CR>" },
+    { from = "<right>", to = ":vertical resize+5<CR>" },
+    -- Comments
+    { from = "<C-?>", to = "gcc", mode = mode_nv },
     -- 关闭除当前窗口外的其它窗口
     { from = "qf", to = "<C-w>o" },
     --{ from = "s", to = "<nop>" },
@@ -85,7 +91,7 @@ local nmappings = {
 
     -- Other
     { from = "<leader>sw", to = ":set wrap<CR>" },
-    { from = "<leader>sc", to = ":set spell!<CR>" },
+    -- { from = "<leader>sc", to = ":set spell!<CR>" },
     { from = "<leader><CR>", to = ":nohlsearch<CR>" },
     { from = "<f10>", to = ":TSHighlightCapturesUnderCursor<CR>" },
     { from = "<leader>o", to = "za" },
@@ -105,7 +111,7 @@ vim.keymap.set("n", "q", "<nop>", { noremap = true })
 vim.keymap.set("n", ",q", "q", { noremap = true })
 
 for _, mapping in ipairs(nmappings) do
-    vim.keymap.set(mapping.mode or "n", mapping.from, mapping.to, { noremap = true })
+    vim.keymap.set(mapping.mode or "n", mapping.from, mapping.to, { noremap = true, silent = true })
 end
 
 local function run_vim_shortcut(shortcut)
@@ -121,3 +127,41 @@ vim.keymap.set("n", "<leader>q", function()
         run_vim_shortcut([[<C-w>j:q<CR>]])
     end
 end, { noremap = true, silent = true })
+
+local split = function()
+    vim.cmd("set splitbelow")
+    vim.cmd("sp")
+    vim.cmd("res -5")
+end
+local compileRun = function()
+    vim.cmd("w")
+    -- check file type
+    local ft = vim.bo.filetype
+    if ft == "dart" then
+        vim.cmd(":FlutterRun -d " .. vim.g.flutter_default_device .. " " .. vim.g.flutter_run_args)
+    elseif ft == "markdown" then
+        vim.cmd(":InstantMarkdownPreview")
+    elseif ft == "c" then
+        split()
+        vim.cmd("term gcc % -o %< && ./%< && rm %<")
+    elseif ft == "cpp" then
+        split()
+        vim.cmd("term g++ % -o %< && ./%< && rm %<")
+    elseif ft == "javascript" then
+        split()
+        vim.cmd("term node %")
+    elseif ft == "lua" then
+        split()
+        vim.cmd("term luajit %")
+    elseif ft == "tex" then
+        vim.cmd(":VimtexCompile")
+    elseif ft == "python" then
+        split()
+        vim.cmd("term python3 %")
+    elseif ft == "sh" then
+        split()
+        vim.cmd("term bash %")
+    end
+end
+
+vim.keymap.set("n", "r", compileRun, { silent = true })
