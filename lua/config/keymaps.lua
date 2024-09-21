@@ -164,7 +164,7 @@ local compileRun = function()
     end
 end
 
-vim.keymap.set("n", "r", compileRun, { silent = true })
+vim.keymap.set("n", "R", compileRun, { silent = true })
 
 -- vim.api.nvim_create_autocmd("FileType", {
 --     pattern = "markdown",
