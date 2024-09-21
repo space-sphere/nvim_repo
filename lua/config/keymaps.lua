@@ -165,3 +165,17 @@ local compileRun = function()
 end
 
 vim.keymap.set("n", "r", compileRun, { silent = true })
+
+-- vim.api.nvim_create_autocmd("FileType", {
+--     pattern = "markdown",
+--     callback = function()
+--         -- 只在 Markdown 文件的缓冲区中设置键映射
+--         vim.keymap.set(
+--             "i",
+--             ",f",
+--             '<Esc>/<++><CR>:nohlsearch<CR>"_c4l',
+--             { innoremap = true, silent = true, buffer = true }
+--         )
+--         -- vim.keymap.set('i', )
+--     end,
+-- })
