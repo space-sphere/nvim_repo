@@ -1,3 +1,7 @@
+if not vim.fn.has("mac") then
+    return {}
+end
+
 return {
     {
         "vscode-neovim/vscode-multi-cursor.nvim",
@@ -15,7 +19,12 @@ return {
             local k = vim.keymap.set
 
             -- 设置键映射
-            k({ "n", "x" }, "mc", cursors.create_cursor, { expr = true, desc = "Create cursor" })
+            -- k({ "n", "x" }, "mc", cursors.create_cursor, { expr = false, desc = "Create cursor" })
+            k({ "n", "x" }, "mc", function()
+                cursors.create_cursor()
+                vim.api.nvim_feedkeys("L", "n", false)
+            end, { desc = "Create cursor and press L" })
+
             k({ "n" }, "mcc", cursors.cancel, { desc = "Cancel/Clear all cursors" })
             k({ "n", "x" }, "mi", cursors.start_left, { desc = "Start cursors on the left" })
             k({ "n", "x" }, "mI", cursors.start_left_edge, { desc = "Start cursors on the left edge" })
