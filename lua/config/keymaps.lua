@@ -164,7 +164,9 @@ local compileRun = function()
     end
 end
 
-vim.keymap.set("n", "R", compileRun, { silent = true })
+if not vim.g.vscode then
+    vim.keymap.set("n", "R", compileRun, { silent = true })
+end
 
 -- vim.api.nvim_create_autocmd("FileType", {
 --     pattern = "markdown",
